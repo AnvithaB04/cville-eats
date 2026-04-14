@@ -2,11 +2,11 @@
 session_start();
 
 if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php");
+    header("Location: auth/login.php");
     exit;
 }
 
-require_once "connect-db.php";
+require_once "includes/connect-db.php";
 
 $message = '';
 $errors = [];
@@ -124,12 +124,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Restaurant - CvilleEats</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <?php
     $headerSubtitle = 'Add a new restaurant';
-    include 'header.php';
+    include 'includes/header.php';
     ?>
 
     <div class="page-container">

@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php");
+    header("Location: auth/login.php");
     exit;
 }
 
@@ -23,7 +23,7 @@ if (!isset($headerSubtitle)) {
         <div class="dropdown-menu hidden">
             <a href="profile.php">My Ratings</a>
             <a href="saved-restaurants.php">Saved Restaurants</a>
-            <a href="logout.php">Logout</a>
+            <a href="auth/logout.php">Logout</a>
         </div>
     </div>
 </header>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "connect-db.php";
+require_once "../includes/connect-db.php";
 
 $error = "";
 
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($user && $password === $user["Password_Hash"]) {
             $_SESSION["user_id"] = $user["User_ID"];
             $_SESSION["username"] = $user["Username"];
-            header("Location: home.php");
+            header("Location: ../home.php");
             exit;
         } else {
             $error = "Invalid username/email or password.";

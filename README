@@ -22,6 +22,18 @@ CvilleEats is a web-based restaurant finder and review application for Charlotte
 - Favorites
 - Cuisine and dietary filtering
 
+## Project Structure
+- `auth/` authentication pages
+   - `login.php`
+   - `signup.php`
+   - `logout.php`
+- `includes/` shared backend/view includes
+   - `connect-db.php`
+   - `header.php`
+- `assets/css/` shared styles
+   - `style.css`
+- Root `*.php` files are main app pages/routes (home, explore, review, profile, etc.)
+
 ## How to Run Locally
 1. Start Apache and MySQL in XAMPP.
 2. Place the project folder inside `htdocs`.

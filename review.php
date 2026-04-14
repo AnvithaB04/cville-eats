@@ -2,11 +2,11 @@
 session_start();
 
 if (!isset($_SESSION["user_id"])) {
-    header("Location: login.php");
+    header("Location: auth/login.php");
     exit;
 }
 
-require_once "connect-db.php";
+require_once "includes/connect-db.php";
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("Invalid restaurant ID.");
@@ -95,12 +95,12 @@ $currentReview = $stmt->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review <?php echo htmlspecialchars($restaurant['Restaurant_Name']); ?> - CvilleEats</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <?php
     $headerSubtitle = 'Write a review';
-    include 'header.php';
+    include 'includes/header.php';
     ?>
 
     <div class="page-container">
