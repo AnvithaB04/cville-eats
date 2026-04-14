@@ -1,0 +1,12 @@
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# XAMPP / local config
+config.local.php
+
+# Mac
+.AppleDouble
+.LSOverride
