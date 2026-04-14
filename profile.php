@@ -77,7 +77,7 @@ $summary = $stmt->fetch(PDO::FETCH_ASSOC);
                         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
                             <p style="font-size:0.9rem;color:#555;margin:0;">Rated on <?php echo date('M j, Y', strtotime($rating['Created_At'])); ?></p>
                             <div style="display:flex;gap:8px;">
-                                <a href="edit-review.php?id=<?php echo intval($rating['Review_ID']); ?>" class="button button-secondary button-small">Update review</a>
+                                <a href="review.php?id=<?php echo intval($rating['Restaurant_ID']); ?>" class="button button-secondary button-small">Update review</a>
                                 <form method="POST" class="delete-review-form" style="margin:0;">
                                     <button class="button button-secondary" type="submit" name="delete_review" value="<?php echo intval($rating['Review_ID'] ?? 0); ?>">Delete review</button>
                                 </form>
