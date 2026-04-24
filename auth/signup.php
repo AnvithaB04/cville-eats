@@ -33,10 +33,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 VALUES (:username, :email, :password)
             ";
             $insertStmt = $pdo->prepare($insertSql);
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             $insertStmt->execute([
                 'username' => $username,
                 'email' => $email,
-                'password' => $password
+                'password' => $hashedPassword
             ]);
 
             $success = "Account created successfully. You can now log in.";

@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->execute(['username' => $username]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($user && $password === $user["Password_Hash"]) {
+        if ($user && password_verify($password, $user["Password_Hash"])) {
             $_SESSION["user_id"] = $user["User_ID"];
             $_SESSION["username"] = $user["Username"];
             header("Location: ../home.php");
