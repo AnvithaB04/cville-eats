@@ -23,6 +23,9 @@ if (!isset($headerSubtitle)) {
         <div class="dropdown-menu hidden">
             <a href="profile.php">My Ratings</a>
             <a href="saved-restaurants.php">Saved Restaurants</a>
+             <?php if (!empty($_SESSION["is_admin"])): ?>
+            <a href="admin-approvals.php">Admin Panel</a>
+            <?php endif; ?>
             <a href="auth/logout.php">Logout</a>
         </div>
     </div>

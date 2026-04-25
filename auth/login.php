@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $error = "Please fill in all fields.";
     } else {
         $sql = "
-            SELECT User_ID, Username, Email, Password_Hash
+            SELECT User_ID, Username, Email, Password_Hash, Is_Admin
             FROM User
             WHERE Username = :username OR Email = :username
             LIMIT 1
@@ -25,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($user && password_verify($password, $user["Password_Hash"])) {
             $_SESSION["user_id"] = $user["User_ID"];
             $_SESSION["username"] = $user["Username"];
+            $_SESSION["is_admin"] = $user["Is_Admin"];
             header("Location: ../home.php");
             exit;
         } else {

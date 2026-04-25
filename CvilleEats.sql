@@ -241,6 +241,31 @@ INSERT INTO `Restaurant` (`Restaurant_ID`, `Restaurant_Name`, `Price_Level`, `St
 (23, 'Barbie\'s Burrito Barn', '$', '201 Avon St', '22902', 0, 0, 0),
 (24, 'Brazos Tacos', '$', '925 Second St SE', '22902', 0, 0, 0);
 
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Pending_Restaurant`
+--
+
+CREATE TABLE `Pending_Restaurant` (
+  `Pending_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(100) DEFAULT NULL,
+  `Price_Level` varchar(5) DEFAULT NULL,
+  `Street` varchar(100) DEFAULT NULL,
+  `City` varchar(50) DEFAULT NULL,
+  `State` varchar(50) DEFAULT NULL,
+  `Zip_Code` char(5) DEFAULT NULL,
+  `Vegetarian` tinyint(1) DEFAULT 0,
+  `Vegan` tinyint(1) DEFAULT 0,
+  `GlutenFree` tinyint(1) DEFAULT 0,
+  `Phones` text DEFAULT NULL,
+  `Cuisines` text DEFAULT NULL,
+  `Hours` text DEFAULT NULL,
+  PRIMARY KEY (`Pending_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- --------------------------------------------------------
 
 --
@@ -387,6 +412,7 @@ CREATE TABLE `User` (
   `Username` varchar(50) NOT NULL,
   `Email` varchar(100) NOT NULL,
   `Password_Hash` varchar(255) NOT NULL,
+  `Is_Admin` tinyint(1) DEFAULT 0,
   `Date_Created` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
