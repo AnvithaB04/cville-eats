@@ -344,7 +344,7 @@ CREATE TABLE `Review` (
   `Rating` int(11) NOT NULL,
   `Comment` text DEFAULT NULL,
   `Review_Date` datetime DEFAULT current_timestamp()
-  CONSTRAINT check_rating_range CHECK (`Rating` >= 1 AND `Rating <= 5)
+  CONSTRAINT check_rating_range CHECK (`Rating` >= 1 AND `Rating` <= 5)
 ) ;
 
 --
