@@ -12,6 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($username === "" || $email === "" || $password === "") {
         $error = "Please fill in all fields.";
+    } elseif (strlen($password) < 8) {
+        $error = "Password must be at least 8 characters.";
     } else {
         $checkSql = "
             SELECT User_ID

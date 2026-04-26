@@ -7,6 +7,15 @@ if (empty($_SESSION["is_admin"])) {
     die("Access denied.");
 }
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    die('Invalid request method.');
+}
+
+$csrfToken = $_POST['csrf_token'] ?? '';
+if (empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $csrfToken)) {
+    die('Invalid CSRF token.');
+}
+
 $id = $_POST['id'] ?? null;
 if (!$id) die("Invalid request");
 

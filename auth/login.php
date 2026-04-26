@@ -14,23 +14,45 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $sql = "
             SELECT User_ID, Username, Email, Password_Hash, Is_Admin
             FROM User
-            WHERE Username = :username OR Email = :username
+            WHERE Username = :username OR Email = :email
             LIMIT 1
         ";
 
         $stmt = $pdo->prepare($sql);
-        $stmt->execute(['username' => $username]);
+        $stmt->execute([
+            'username' => $username,
+            'email' => $username
+        ]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($user && password_verify($password, $user["Password_Hash"])) {
-            $_SESSION["user_id"] = $user["User_ID"];
-            $_SESSION["username"] = $user["Username"];
-            $_SESSION["is_admin"] = $user["Is_Admin"];
-            header("Location: ../home.php");
-            exit;
-        } else {
-            $error = "Invalid username/email or password.";
+        if ($user) {
+            $storedPassword = $user["Password_Hash"];
+            $isValidLogin = false;
+
+            if (password_verify($password, $storedPassword)) {
+                $isValidLogin = true;
+            } elseif (!preg_match('/^\$2[aby]\$/', $storedPassword) && $password === $storedPassword) {
+                // One-time fallback for legacy plaintext seeds, then migrate to hash.
+                $isValidLogin = true;
+                $newHash = password_hash($password, PASSWORD_DEFAULT);
+                $upgradeStmt = $pdo->prepare("UPDATE User SET Password_Hash = :hash WHERE User_ID = :id");
+                $upgradeStmt->execute([
+                    'hash' => $newHash,
+                    'id' => $user["User_ID"]
+                ]);
+            }
+
+            if ($isValidLogin) {
+                session_regenerate_id(true);
+                $_SESSION["user_id"] = $user["User_ID"];
+                $_SESSION["username"] = $user["Username"];
+                $_SESSION["is_admin"] = $user["Is_Admin"];
+                header("Location: ../home.php");
+                exit;
+            }
         }
+
+        $error = "Invalid username/email or password.";
     }
 }
 ?>

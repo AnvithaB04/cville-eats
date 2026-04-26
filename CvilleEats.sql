@@ -21,6 +21,10 @@ SET time_zone = "+00:00";
 -- Database: `CvilleEats`
 --
 
+DROP DATABASE IF EXISTS `CvilleEats`;
+CREATE DATABASE `CvilleEats` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `CvilleEats`;
+
 -- --------------------------------------------------------
 
 --
@@ -343,7 +347,7 @@ CREATE TABLE `Review` (
   `Restaurant_ID` int(11) NOT NULL,
   `Rating` int(11) NOT NULL,
   `Comment` text DEFAULT NULL,
-  `Review_Date` datetime DEFAULT current_timestamp()
+  `Review_Date` datetime DEFAULT current_timestamp(),
   CONSTRAINT check_rating_range CHECK (`Rating` >= 1 AND `Rating` <= 5)
 ) ;
 
@@ -421,13 +425,13 @@ CREATE TABLE `User` (
 -- Dumping data for table `User`
 --
 
-INSERT INTO `User` (`User_ID`, `Username`, `Email`, `Password_Hash`, `Date_Created`) VALUES
-(1, 'anvitha', 'updated_anvitha@example.com', 'hash_anvitha', '2026-03-17 22:57:28'),
-(2, 'krishna', 'krishna@example.com', 'hash_krishna', '2026-03-17 22:57:28'),
-(3, 'aleesha', 'aleesha@example.com', 'hash_aleesha', '2026-03-17 22:57:28'),
-(4, 'uvafoodie', 'uvafoodie@example.com', 'hash_foodie', '2026-03-17 22:57:28'),
-(5, 'cvillelocal', 'cvillelocal@example.com', 'hash_local', '2026-03-17 22:57:28'),
-(6, 'newuser', 'newuser@example.com', 'hash_newuser', '2026-03-17 22:57:28');
+INSERT INTO `User` (`User_ID`, `Username`, `Email`, `Password_Hash`, `Is_Admin`, `Date_Created`) VALUES
+(1, 'anvitha', 'updated_anvitha@example.com', 'hash_anvitha', 0, '2026-03-17 22:57:28'),
+(2, 'krishna', 'krishna@example.com', 'hash_krishna', 0, '2026-03-17 22:57:28'),
+(3, 'aleesha', 'aleesha@example.com', 'hash_aleesha', 0, '2026-03-17 22:57:28'),
+(4, 'uvafoodie', 'uvafoodie@example.com', 'hash_foodie', 0, '2026-03-17 22:57:28'),
+(5, 'cvillelocal', 'cvillelocal@example.com', 'hash_local', 0, '2026-03-17 22:57:28'),
+(6, 'newuser', 'newuser@example.com', 'hash_newuser', 0, '2026-03-17 22:57:28');
 
 --
 -- Indexes for dumped tables
@@ -593,6 +597,38 @@ ALTER TABLE `Review_Like`
   ADD CONSTRAINT `review_like_ibfk_1` FOREIGN KEY (`User_ID`) REFERENCES `User` (`User_ID`) ON DELETE CASCADE,
   ADD CONSTRAINT `review_like_ibfk_2` FOREIGN KEY (`Review_ID`) REFERENCES `Review` (`Review_ID`) ON DELETE CASCADE;
 COMMIT;
+
+-- --------------------------------------------------------
+-- Security setup helpers (run as a DB admin account)
+-- --------------------------------------------------------
+-- Run the statements below manually after importing the schema/data.
+-- Keeping them commented prevents full-import failures in environments
+-- where CREATE USER is restricted and avoids promoting users before signup.
+
+-- 1) Promote an existing signed-up user to admin role in the app.
+--    Example: after creating account admin/admin@gmail.com in signup.
+-- UPDATE `User`
+-- SET `Is_Admin` = 1
+-- WHERE `Username` = 'admin' OR `Email` = 'admin@gmail.com';
+
+-- 2) Database-level least privilege app user.
+--    Commands below match the deployed setup.
+-- CREATE USER IF NOT EXISTS 'cville_app'@'localhost' IDENTIFIED BY 'password';
+-- REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'cville_app'@'localhost';
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON `CvilleEats`.* TO 'cville_app'@'localhost';
+-- SHOW GRANTS FOR 'cville_app'@'localhost';
+
+-- CREATE USER IF NOT EXISTS 'cville_dev_read'@'localhost' IDENTIFIED BY 'DevReadStrongPassword!';
+-- REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'cville_dev_read'@'localhost';
+-- GRANT SELECT ON `CvilleEats`.* TO 'cville_dev_read'@'localhost';
+-- SHOW GRANTS FOR 'cville_dev_read'@'localhost';
+
+-- CREATE USER IF NOT EXISTS 'cville_dev_write'@'localhost' IDENTIFIED BY 'DevWriteStrongPassword!';
+-- REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'cville_dev_write'@'localhost';
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON `CvilleEats`.* TO 'cville_dev_write'@'localhost';
+-- SHOW GRANTS FOR 'cville_dev_write'@'localhost';
+
+-- FLUSH PRIVILEGES;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
