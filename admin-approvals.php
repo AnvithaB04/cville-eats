@@ -33,6 +33,20 @@ include 'includes/header.php';
 
 <div class="page-container">
 <div class="section-card">
+    <div style="margin-bottom:16px;">
+    <a href="explore.php" style="text-decoration:none;">
+        <span style="
+            display:inline-block;
+            background:#1f3c88;
+            color:white;
+            padding:8px 14px;
+            border-radius:10px;
+            font-weight:500;
+        ">
+            ← Back to Explore
+        </span>
+    </a>
+</div>
 
 <h2>Pending Restaurants</h2>
 
