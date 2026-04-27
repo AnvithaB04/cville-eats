@@ -79,7 +79,7 @@ $message = "Restaurant submitted for admin approval!";}
     ?>
 
     <div class="page-container">
-        <a href="javascript:history.back()" class="button button-secondary" style="margin-bottom:15px; display:inline-block;">
+        <a href="explore.php" class="button button-secondary" style="margin-bottom:15px; display:inline-block;">
         ← Back
     </a>
         <div class="section-card">
