@@ -104,6 +104,9 @@ $currentReview = $stmt->fetch(PDO::FETCH_ASSOC);
     ?>
 
     <div class="page-container">
+        <a href="javascript:history.back()" class="button button-secondary" style="margin-bottom:15px; display:inline-block;">
+        ← Back
+    </a>
         <div class="section-card">
             <h2>Review <?php echo htmlspecialchars($restaurant['Restaurant_Name']); ?></h2>
             <p class="restaurant-address">

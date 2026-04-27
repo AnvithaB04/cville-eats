@@ -48,7 +48,16 @@ include 'includes/header.php';
             <input type="hidden" name="id" value="<?php echo $p['Pending_ID']; ?>">
             <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
             <button type="submit">Approve</button>
+
         </form>
+        <form method="POST" action="disapprove.php" style="display:inline;">
+            <input type="hidden" name="id" value="<?php echo htmlspecialchars($p['Pending_ID']); ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+            <button type="submit" onclick="return confirm('Are you sure you want to disapprove this restaurant?')">
+                Disapprove
+            </button>
+        </form>
+    </div>  
     </div>
 <?php endforeach; ?>
 <?php endif; ?>

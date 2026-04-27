@@ -79,6 +79,9 @@ $message = "Restaurant submitted for admin approval!";}
     ?>
 
     <div class="page-container">
+        <a href="javascript:history.back()" class="button button-secondary" style="margin-bottom:15px; display:inline-block;">
+        ← Back
+    </a>
         <div class="section-card">
             <h2>Add Restaurant</h2>
             <?php if (!empty($message)): ?>

@@ -52,6 +52,9 @@ $savedRestaurants = $stmt->fetchAll(PDO::FETCH_ASSOC);
     ?>
 
     <div class="page-container">
+        <a href="explore.php" class="button button-secondary" style="margin-bottom:15px; display:inline-block;">
+        ← Back
+    </a>
         <h2>Saved Restaurants</h2>
 
         <?php if (empty($savedRestaurants)): ?>

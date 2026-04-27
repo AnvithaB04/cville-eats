@@ -55,6 +55,9 @@ $summary = $stmt->fetch(PDO::FETCH_ASSOC);
     ?>
 
     <div class="page-container">
+        <a href="explore.php" class="button button-secondary" style="margin-bottom:15px; display:inline-block;">
+        ← Back
+    </a>
         <div class="detail-card profile-summary">
             <h2>Hi, <?php echo htmlspecialchars($_SESSION["username"]); ?></h2>
             <p>You have rated <strong><?php echo htmlspecialchars($summary['total']); ?></strong> restaurant<?php echo $summary['total'] == 1 ? '' : 's'; ?>.</p>
