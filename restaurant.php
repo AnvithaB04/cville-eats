@@ -143,6 +143,9 @@ $ratingList = $reviewsStmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php if ($currentReview): ?>
                         <div class="meta-row"><strong>Your rating</strong><span><?php echo intval($currentReview['Rating']); ?> / 5</span></div>
                     <?php endif; ?>
+                    <?php if (!empty($_SESSION['is_admin'])): ?>
+                        <a class="button" href="edit-restaurant.php?id=<?php echo $restaurantId; ?>" style="margin-bottom: 10px;">Edit restaurant</a>
+                    <?php endif; ?>
                     <a class="button" href="review.php?id=<?php echo $restaurantId; ?>">
                         <?php echo $currentReview ? 'Edit review' : 'Add review'; ?>
                     </a>

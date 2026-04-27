@@ -9,6 +9,9 @@ if (!isset($_SESSION["user_id"])) {
 
 require_once "includes/connect-db.php";
 
+// Use local Charlottesville time for Open Now filtering.
+date_default_timezone_set('America/New_York');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_favorite'])) {
     $restaurantId = (int) $_POST['toggle_favorite'];
 
@@ -45,8 +48,8 @@ $sql = "
            CASE WHEN EXISTS (
                SELECT 1 FROM Opening_Hours oh
                WHERE oh.Restaurant_ID = r.Restaurant_ID
-               AND oh.Day_Of_Week = '$currentDay'
-               AND '$currentTime' BETWEEN oh.Open_Time AND oh.Close_Time
+               AND oh.Day_Of_Week = :currentDay
+               AND :currentTime BETWEEN oh.Open_Time AND oh.Close_Time
            ) THEN 1 ELSE 0 END AS Is_Open_Now
     FROM Restaurant r
     JOIN Location l ON r.Zip_Code = l.Zip_Code
@@ -57,7 +60,11 @@ $sql = "
 ";
 
 $stmt = $pdo->prepare($sql);
-$stmt->execute(['userId' => $_SESSION['user_id']]);
+$stmt->execute([
+    'userId' => $_SESSION['user_id'],
+    'currentDay' => $currentDay,
+    'currentTime' => $currentTime,
+]);
 $restaurants = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 

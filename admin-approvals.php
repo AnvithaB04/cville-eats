@@ -71,7 +71,6 @@ include 'includes/header.php';
                 Disapprove
             </button>
         </form>
-    </div>  
     </div>
 <?php endforeach; ?>
 <?php endif; ?>
