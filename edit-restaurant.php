@@ -32,6 +32,15 @@ function normalizePhoneNumber(string $raw): string
     return preg_replace('/\D+/', '', $raw) ?? '';
 }
 
+function normalizeCuisineKey(string $value): string
+{
+    if (function_exists('mb_strtolower')) {
+        return mb_strtolower($value, 'UTF-8');
+    }
+
+    return strtolower($value);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $csrfToken = $_POST['csrf_token'] ?? '';
     if (!hash_equals($_SESSION['csrf_token'], $csrfToken)) {
@@ -77,16 +86,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $pdo->beginTransaction();
 
-            $locationStmt = $pdo->prepare(
-                "INSERT INTO Location (Zip_Code, City, State)
-                 VALUES (:zip, :city, :state)
-                 ON DUPLICATE KEY UPDATE City = VALUES(City), State = VALUES(State)"
+            $locationExistsStmt = $pdo->prepare(
+                "SELECT 1
+                 FROM Location
+                 WHERE Zip_Code = :zip
+                 LIMIT 1"
             );
-            $locationStmt->execute([
-                'zip' => $zip,
-                'city' => $city,
-                'state' => $state,
-            ]);
+            $locationExistsStmt->execute(['zip' => $zip]);
+
+            if ($locationExistsStmt->fetchColumn()) {
+                $updateLocationStmt = $pdo->prepare(
+                    "UPDATE Location
+                     SET City = :city,
+                         State = :state
+                     WHERE Zip_Code = :zip"
+                );
+                $updateLocationStmt->execute([
+                    'zip' => $zip,
+                    'city' => $city,
+                    'state' => $state,
+                ]);
+            } else {
+                $insertLocationStmt = $pdo->prepare(
+                    "INSERT INTO Location (Zip_Code, City, State)
+                     VALUES (:zip, :city, :state)"
+                );
+                $insertLocationStmt->execute([
+                    'zip' => $zip,
+                    'city' => $city,
+                    'state' => $state,
+                ]);
+            }
 
             $updateRestaurantStmt = $pdo->prepare(
                 "UPDATE Restaurant
@@ -140,12 +170,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $foundCuisineLookup = [];
                 foreach ($foundCuisines as $foundCuisineName) {
-                    $foundCuisineLookup[mb_strtolower($foundCuisineName)] = true;
+                    $foundCuisineLookup[normalizeCuisineKey($foundCuisineName)] = true;
                 }
 
                 $missingCuisines = [];
                 foreach ($cuisineNames as $cuisineName) {
-                    if (!isset($foundCuisineLookup[mb_strtolower($cuisineName)])) {
+                    if (!isset($foundCuisineLookup[normalizeCuisineKey($cuisineName)])) {
                         $missingCuisines[] = $cuisineName;
                     }
                 }
@@ -198,6 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($pdo->inTransaction()) {
                 $pdo->rollBack();
             }
+            error_log('Edit restaurant failed for Restaurant_ID ' . $restaurantId . ': ' . $e->getMessage());
             $errors[] = 'Failed to update restaurant. Please try again.';
         }
     }
